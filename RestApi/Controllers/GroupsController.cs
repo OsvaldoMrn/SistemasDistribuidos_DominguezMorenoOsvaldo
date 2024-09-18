@@ -25,4 +25,14 @@ public class GroupsController : ControllerBase
         }
         return Ok(group.ToDto());
     }
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<GroupResponse>>> GetGroupsByName([FromQuery] string name, CancellationToken cancellationToken)
+    {
+        var groups = await _groupService.GetGroupsByNameAsync(name, cancellationToken);
+        if(groups == null || !groups.Any())
+        {
+            return Ok(new List<GroupResponse>());
+        }
+        return Ok(groups.Select(group => group.ToDto()));
+    }
 }
