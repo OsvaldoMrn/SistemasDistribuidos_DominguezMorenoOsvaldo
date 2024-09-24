@@ -53,13 +53,14 @@ public class GroupsController : ControllerBase
         // 200 - response del objeto actualizado
         // 204 - sin response
 
+    //Paginación tarea
     [HttpGet]
     public async Task<ActionResult<IEnumerable<GroupResponse>>> GetGroupsByName(
-        CancellationToken cancellationToken,
         [FromQuery] string name, 
-        [FromQuery] int pageIndex = 1, 
-        [FromQuery] int pageSize = 10, 
-        [FromQuery] string orderBy = "name")
+        [FromQuery] int pageIndex, 
+        [FromQuery] int pageSize, 
+        [FromQuery] string orderBy,
+        CancellationToken cancellationToken)
     {
         var groups = await _groupService.GetGroupsByNameAsync(name, pageIndex, pageSize, orderBy, cancellationToken);
         

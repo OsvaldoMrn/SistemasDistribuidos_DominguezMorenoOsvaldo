@@ -25,6 +25,8 @@ public class GroupService : IGroupService
 
         };
     }
+
+    //paginacion tarea
     public async Task<IEnumerable<GroupUserModel>> GetGroupsByNameAsync(string name, int pageIndex, int pageSize, string orderBy, CancellationToken cancellationToken)
     {
         var groups = await _groupRepository.GetByNameAsync(name, cancellationToken);
