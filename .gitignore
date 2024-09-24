@@ -48,3 +48,10 @@ $RECYCLE.BIN/
 *.tmp
 *.vsix
 *.vsixmanifest
+
+#proyectos anteriores
+ChatP2P/
+FileDownload/
+HelloWorld/
+HelloWorldGo/
+SoapApi/
