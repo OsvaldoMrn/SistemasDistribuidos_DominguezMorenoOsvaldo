@@ -53,7 +53,8 @@ public class GroupsController : ControllerBase
         // 200 - response del objeto actualizado
         // 204 - sin response
 
-    //Paginación tarea*
+
+    //Paginación tarea
     [HttpGet]
     public async Task<ActionResult<IEnumerable<GroupResponse>>> GetGroupsByName(
         [FromQuery] string name, 
