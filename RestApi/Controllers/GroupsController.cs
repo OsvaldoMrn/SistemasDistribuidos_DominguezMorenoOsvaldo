@@ -54,7 +54,7 @@ public class GroupsController : ControllerBase
         // 204 - sin response
 
 
-    //Paginación tarea
+    //Paginación tarea*
     [HttpGet]
     public async Task<ActionResult<IEnumerable<GroupResponse>>> GetGroupsByName(
         [FromQuery] string name, 
