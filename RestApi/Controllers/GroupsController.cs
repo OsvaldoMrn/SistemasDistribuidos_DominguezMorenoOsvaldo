@@ -109,17 +109,4 @@ public class GroupsController : ControllerBase
         };
     }
 
-    [HttpGet("GetByExactName")]
-public async Task<IActionResult> GetByExactName(string name, CancellationToken cancellationToken)
-    {
-        var group = await _groupService.GetGroupByExactNameAsync(name, cancellationToken);
-
-        if (group == null)
-        {
-            return NotFound();
-        }
-
-        return Ok(group);
-    }
-
 }
