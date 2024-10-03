@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using RestApi.Dtos;
 using RestApi.Services;
 using RestApi.Mappers;
+using RestApi.Exceptions;
+using System.Net;
 
 namespace RestApi.Controllers;
 
@@ -71,6 +73,66 @@ public class GroupsController : ControllerBase
         }
 
         return Ok(groups.Select(group => group.ToDto()));
+    }
+    
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteGroup(string id, CancellationToken cancellationToken){
+        try{
+            await _groupService.DeleteGroupByIdAsync(id, cancellationToken);
+            return NoContent();
+        }catch(GroupNotFoundException){
+            return NotFound();
+        }
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<GroupResponse>> CreateGroup([FromBody]CreateGroupRequest groupRequest, CancellationToken cancellationToken){
+        try{
+            var group = await _groupService.CreateGroupAsync(groupRequest.Name, groupRequest.Users, cancellationToken);
+            return CreatedAtAction(nameof(GetGroupById), new {id = group.Id}, group.ToDto());
+        }catch(InvalidGroupRequestFormatException){
+            return BadRequest(NewValidationProblemDetails("One or more validation errors occured.", HttpStatusCode.BadRequest, new Dictionary<string, string[]>{
+                {"Groups", ["Users array is empy"]}
+            }));
+        }catch(GroupAlreadyExistsException){
+            return Conflict(NewValidationProblemDetails("One or more validation errors occured.", HttpStatusCode.Conflict, new Dictionary<string, string[]>{
+                {"Groups", ["Group with same name already exists"]}
+            }));
+        }catch(UserDoesNotExistsException){
+            return Conflict(NewValidationProblemDetails("One or more validation errors occured.", HttpStatusCode.Conflict, new Dictionary<string, string[]>{
+                {"Groups", ["User not found with the provided ID"]}
+            }));
+        }
+    }
+
+    private static ValidationProblemDetails NewValidationProblemDetails(string title, HttpStatusCode statusCode, Dictionary<string, string[]> errors){
+        return new ValidationProblemDetails{
+            Title = title,
+            Status = (int) statusCode,
+            Errors = errors
+        };
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateGroup(string id, [FromBody] UpdateGroupRequest groupRequest, CancellationToken cancellationToken){
+        try{
+            await _groupService.UpdateGroupAsync(id, groupRequest.Name, groupRequest.Users, cancellationToken);
+            return NoContent(); 
+        }catch(GroupNotFoundException){
+            return NotFound();
+        }catch(InvalidGroupRequestFormatException){
+            return BadRequest(NewValidationProblemDetails("One or more validation errors occured.", HttpStatusCode.BadRequest, new Dictionary<string, string[]>{
+                {"Groups", ["Users array is empy"]}
+            }));
+        }catch(GroupAlreadyExistsException){
+            return Conflict(NewValidationProblemDetails("One or more validation errors occured.", HttpStatusCode.Conflict, new Dictionary<string, string[]>{
+                {"Groups", ["Group with same name already exists"]}
+            }));
+        }catch(UserDoesNotExistsException){
+            return Conflict(NewValidationProblemDetails("One or more validation errors occured.", HttpStatusCode.Conflict, new Dictionary<string, string[]>{
+                {"Groups", ["User not found with the provided ID"]}
+            }));
+        }
     }
 
 }
