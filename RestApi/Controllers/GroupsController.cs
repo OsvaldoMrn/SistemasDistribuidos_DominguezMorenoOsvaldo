@@ -98,6 +98,10 @@ public class GroupsController : ControllerBase
             return Conflict(NewValidationProblemDetails("One or more validation errors occured.", HttpStatusCode.Conflict, new Dictionary<string, string[]>{
                 {"Groups", ["Group with same name already exists"]}
             }));
+        }catch(UserDoesNotExistsException){
+            return Conflict(NewValidationProblemDetails("One or more validation errors occured.", HttpStatusCode.Conflict, new Dictionary<string, string[]>{
+                {"Groups", ["User not found with the provided ID"]}
+            }));
         }
     }
 
@@ -107,6 +111,28 @@ public class GroupsController : ControllerBase
             Status = (int) statusCode,
             Errors = errors
         };
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateGroup(string id, [FromBody] UpdateGroupRequest groupRequest, CancellationToken cancellationToken){
+        try{
+            await _groupService.UpdateGroupAsync(id, groupRequest.Name, groupRequest.Users, cancellationToken);
+            return NoContent(); 
+        }catch(GroupNotFoundException){
+            return NotFound();
+        }catch(InvalidGroupRequestFormatException){
+            return BadRequest(NewValidationProblemDetails("One or more validation errors occured.", HttpStatusCode.BadRequest, new Dictionary<string, string[]>{
+                {"Groups", ["Users array is empy"]}
+            }));
+        }catch(GroupAlreadyExistsException){
+            return Conflict(NewValidationProblemDetails("One or more validation errors occured.", HttpStatusCode.Conflict, new Dictionary<string, string[]>{
+                {"Groups", ["Group with same name already exists"]}
+            }));
+        }catch(UserDoesNotExistsException){
+            return Conflict(NewValidationProblemDetails("One or more validation errors occured.", HttpStatusCode.Conflict, new Dictionary<string, string[]>{
+                {"Groups", ["User not found with the provided ID"]}
+            }));
+        }
     }
 
 }

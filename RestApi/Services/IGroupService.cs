@@ -12,4 +12,5 @@ public interface IGroupService{
 
     Task<GroupUserModel> GetGroupByExactNameAsync(string name, CancellationToken cancellationToken);
 
+    Task UpdateGroupAsync(string id, string name, Guid[] users, CancellationToken cancellationToken);
 }
