@@ -1,10 +1,11 @@
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using RestApi.Dtos;
 using RestApi.Services;
 using RestApi.Mappers;
 using RestApi.Exceptions;
+using System.Text.RegularExpressions;
 using System.Net;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RestApi.Controllers;
 
@@ -17,6 +18,7 @@ public class GroupsController : ControllerBase
     {
         _groupService = groupService;
     }
+    [Authorize]
     [HttpGet("{id}")]
     public async Task<ActionResult<GroupResponse>> GetGroupById(string Id, CancellationToken cancellationToken)
     {
