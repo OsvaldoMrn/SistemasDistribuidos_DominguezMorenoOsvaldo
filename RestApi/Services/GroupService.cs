@@ -107,6 +107,42 @@ public class GroupService : IGroupService
         };
     }
 
+        {
+            var user = await _userRepository.GetByIdAsync(userId, cancellationToken);
+            if (user is null)
+            {
+                throw new UserDoesNotExistsException(); 
+            }
+            return user;
+        }));
+
+        var group = await _groupRepository.CreateAsync(name, users, cancellationToken);
+        return new GroupUserModel{
+            Id = group.Id,
+            Name = group.Name,
+            CreationDate = group.CreationDate,
+            Users = (await Task.WhenAll(group.Users.Select(userId => _userRepository.GetByIdAsync(userId, cancellationToken)))).Where(user => user !=null).ToList()
+
+        };
+    }
+
+    public async Task<GroupUserModel> GetGroupByExactNameAsync(string name, CancellationToken cancellationToken)
+    {
+        var group = await _groupRepository.GetByExactNameAsync(name, cancellationToken);
+        if (group == null)
+        {
+            return null;
+        }
+
+        return new GroupUserModel
+        {
+            Id = group.Id,
+            Name = group.Name,
+            CreationDate = group.CreationDate,
+            Users = (await Task.WhenAll(group.Users.Select(userId => _userRepository.GetByIdAsync(userId, cancellationToken)))).Where(user => user != null).ToList()
+        };
+    }
+
     public async Task UpdateGroupAsync(string id, string name, Guid[] users, CancellationToken cancellationToken)
     {
         if (users.Length == 0)

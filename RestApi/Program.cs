@@ -37,7 +37,7 @@ builder.Services.AddAuthorization(options =>{
     options.AddPolicy("Write", policy => policy.RequireClaim("http://schemas.microsoft.com/identity/claims/scope", "write"));
 
 });
-    
+
 
 var app = builder.Build();
 
