@@ -15,7 +15,7 @@ spec:
     spec: 
       containers:
         - name: groups-api
-          image: localhost:5000/groups-api:1
+          image: localhost:5000/groups-api:40
           env:
             - name: "UserServiceEndpoint"
               value: "http://users-api-svc.backend-api.svc.cluster.local:8080/UserService.svc"
