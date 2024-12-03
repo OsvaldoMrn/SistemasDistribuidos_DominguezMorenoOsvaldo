@@ -4,6 +4,7 @@ using RestApi.Dtos;
 using RestApi.Services;
 using RestApi.Mappers;
 
+
 [ApiController]
 using RestApi.Exceptions;
 using System.Text.RegularExpressions;
@@ -73,6 +74,7 @@ public class GroupsController : ControllerBase
         // 200 - response del objeto actualizado
         // 204 - sin response
 
+
     [HttpGet]
     public async Task<ActionResult<IEnumerable<GroupResponse>>> GetGroupsByName(
         CancellationToken cancellationToken,
@@ -100,6 +102,7 @@ public class GroupsController : ControllerBase
 
         return Ok(groups.Select(group => group.ToDto()));
     }
+
         return Ok(groups.Select(group => group.ToDto()));
     }
 

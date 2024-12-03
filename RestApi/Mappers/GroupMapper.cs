@@ -10,6 +10,7 @@ public static class GroupMapper{
             Id = group.Id,
             Name = group.Name,
 
+
             CreationDate = group.CreationDate
         };
     }

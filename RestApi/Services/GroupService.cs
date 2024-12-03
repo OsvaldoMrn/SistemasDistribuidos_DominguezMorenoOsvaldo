@@ -8,6 +8,7 @@ public class GroupService : IGroupService
 {
     private readonly IGroupRepository _groupRepository;
 
+
     public GroupService(IGroupRepository groupRepository){
         _groupRepository = groupRepository;
     }
@@ -16,6 +17,7 @@ public class GroupService : IGroupService
         _groupRepository = groupRepository;
         _userRepository = userRepository;
     }
+
 
 
     public async Task DeleteGroupByIdAsync(string id, CancellationToken cancellationToken)
@@ -38,6 +40,7 @@ public class GroupService : IGroupService
             Id = group.Id,
             Name = group.Name,
 
+
             CreationDate = group.CreationDate
         };
     }
@@ -56,9 +59,11 @@ public class GroupService : IGroupService
 
         };
     }
+
     public async Task<IEnumerable<GroupUserModel>> GetGroupsByNameAsync(string name, int pageIndex, int pageSize, string orderBy, CancellationToken cancellationToken)
     {
         var groups = await _groupRepository.GetByNameAsync(name, cancellationToken);
+
 
 
     public async Task<IEnumerable<GroupUserModel>> GetGroupsByNameAsync(string name, int pageIndex, int pageSize, string orderBy, CancellationToken cancellationToken)
@@ -88,6 +93,7 @@ public class GroupService : IGroupService
             .Skip((pageIndex - 1) * pageSize)
             .Take(pageSize)
             .ToList();
+
         return groupUserModels;
     }
 

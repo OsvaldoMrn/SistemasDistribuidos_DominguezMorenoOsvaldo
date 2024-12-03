@@ -15,6 +15,7 @@ public class UserService : IUserContract{
 
 
 
+
     public async Task<UserResponseDto> CreateUser(UserCreateRequestDto userRequest, CancellationToken cancellationToken)
     {
         var user = userRequest.ToModel();
@@ -60,6 +61,7 @@ public class UserService : IUserContract{
     }
 
 
+
     public async Task<UserResponseDto> UpdateUser(UserUpdateRequestDto userRequest, CancellationToken cancellationToken)
     {
         var existingUser = await _userRepository.GetByIdAsync(userRequest.Id, cancellationToken);
@@ -78,5 +80,6 @@ public class UserService : IUserContract{
         var updatedUser = await _userRepository.UpdateAsync(existingUser, cancellationToken);
         return updatedUser.ToDto();
     }
+
 
 }
