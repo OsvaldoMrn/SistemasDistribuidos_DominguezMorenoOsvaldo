@@ -3,14 +3,17 @@ using Microsoft.AspNetCore.Mvc;
 using RestApi.Dtos;
 using RestApi.Services;
 using RestApi.Mappers;
+
 using RestApi.Exceptions;
 using System.Text.RegularExpressions;
 using System.Net;
 using Microsoft.AspNetCore.Authorization;
 
+
 namespace RestApi.Controllers;
 
 [ApiController]
+
 [Authorize]
 [Route("[controller]")]
 public class GroupsController : ControllerBase
@@ -21,6 +24,7 @@ public class GroupsController : ControllerBase
         _groupService = groupService;
     }
     [HttpGet("{id}")]
+
     [Authorize]
     [HttpGet("{id}")]
     [Authorize(Policy = "Read")]
@@ -33,6 +37,10 @@ public class GroupsController : ControllerBase
         }
         return Ok(group.ToDto());
     }
+
+    public async Task<ActionResult<IEnumerable<GroupResponse>>> GetGroupsByName([FromQuery] string name, CancellationToken cancellationToken)
+    {
+        var groups = await _groupService.GetGroupsByNameAsync(name, cancellationToken);
 
     //localhost/groups
     //GET localhost/groups/ID
@@ -79,6 +87,8 @@ public class GroupsController : ControllerBase
         {
             return Ok(new List<GroupResponse>());
         }
+        return Ok(groups.Select(group => group.ToDto()));
+    }
 
         return Ok(groups.Select(group => group.ToDto()));
     }

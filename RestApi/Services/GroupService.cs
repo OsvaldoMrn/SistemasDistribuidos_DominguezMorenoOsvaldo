@@ -38,6 +38,16 @@ public class GroupService : IGroupService
             CreationDate = group.CreationDate
         };
     }
+    public async Task<IEnumerable<GroupUserModel>> GetGroupsByNameAsync(string name, CancellationToken cancellationToken) // Nuevo método
+    {
+        var groups = await _groupRepository.GetByNameAsync(name, cancellationToken);
+        return groups.Select(group => new GroupUserModel
+        {
+            Id = group.Id,
+            Name = group.Name,
+            CreationDate = group.CreationDate
+        });
+    }
             CreationDate = group.CreationDate,
             Users = (await Task.WhenAll(group.Users.Select(userId => _userRepository.GetByIdAsync(userId, cancellationToken)))).Where(user => user !=null).ToList()
 

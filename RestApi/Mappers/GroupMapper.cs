@@ -12,6 +12,7 @@ public static class GroupMapper{
             CreationDate = group.CreationDate
         };
     }
+
             CreationDate = group.CreationDate,
             Users = group.Users.ToDto()
         };
