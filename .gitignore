@@ -49,6 +49,7 @@ $RECYCLE.BIN/
 *.vsix
 *.vsixmanifest
 
+
 #proyectos anteriores
 ChatP2P/
 FileDownload/
