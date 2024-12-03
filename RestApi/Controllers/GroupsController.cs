@@ -6,7 +6,6 @@ using RestApi.Mappers;
 using RestApi.Exceptions;
 using System.Net;
 
-
 [ApiController]
 using RestApi.Exceptions;
 using System.Text.RegularExpressions;
@@ -138,6 +137,7 @@ public class GroupsController : ControllerBase
             Errors = errors
         };
     }
+
 
     [HttpGet("GetByExactName")]
 public async Task<IActionResult> GetByExactName(string name, CancellationToken cancellationToken)

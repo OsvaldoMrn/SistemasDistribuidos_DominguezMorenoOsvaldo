@@ -68,6 +68,7 @@ public class GroupRepository : IGroupRepository
 
 
 
+
     public async Task<IEnumerable<GroupModel>> GetByNameAsync(string name, int pageIndex, int pageSize, string orderBy, CancellationToken cancellationToken)
     {
         var filter = Builders<GroupEntity>.Filter.Regex(x => x.Name, new MongoDB.Bson.BsonRegularExpression(name, "i"));
@@ -95,6 +96,7 @@ public class GroupRepository : IGroupRepository
         var group = await _groups.Find(filter).FirstOrDefaultAsync(cancellationToken);
         return group?.ToModel();
     }
+
 
 
     public async Task UpdateGroupAsync(string id, string name, Guid[] users, CancellationToken cancellationToken)
