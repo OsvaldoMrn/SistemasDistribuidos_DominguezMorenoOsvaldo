@@ -14,6 +14,7 @@ public interface IUserContract{
     [OperationContract]
     public Task<IList<UserResponseDto>> GetAllByEmail(string email, CancellationToken cancellationToken);
 
+
     [OperationContract]
     public Task<bool> DeleteUserById(Guid userId, CancellationToken cancellationToken);
     [OperationContract]
@@ -23,4 +24,5 @@ public interface IUserContract{
     //lastname
     //firstname
     //birthday
+
 }
