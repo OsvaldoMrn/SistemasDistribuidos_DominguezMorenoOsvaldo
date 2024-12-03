@@ -1,12 +1,7 @@
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using RestApi.Dtos;
 using RestApi.Services;
 using RestApi.Mappers;
-using RestApi.Exceptions;
-using System.Net;
-
-[ApiController]
 using RestApi.Exceptions;
 using System.Text.RegularExpressions;
 using System.Net;
@@ -29,8 +24,8 @@ public class GroupsController : ControllerBase
     [HttpGet("{id}")]
 
 
+
     [Authorize]
-    [HttpGet("{id}")]
     [Authorize(Policy = "Read")]
     public async Task<ActionResult<GroupResponse>> GetGroupById(string Id, CancellationToken cancellationToken)
     {
@@ -76,7 +71,9 @@ public class GroupsController : ControllerBase
         // 204 - sin response
 
 
+
     [HttpGet]
+    [Authorize(Policy = "Read")]
     public async Task<ActionResult<IEnumerable<GroupResponse>>> GetGroupsByName(
         CancellationToken cancellationToken,
         [FromQuery] string name, 
@@ -105,6 +102,9 @@ public class GroupsController : ControllerBase
     }
     
     [HttpDelete("{id}")]
+
+    [Authorize(Policy = "Write")]
+
     public async Task<IActionResult> DeleteGroup(string id, CancellationToken cancellationToken){
         try{
             await _groupService.DeleteGroupByIdAsync(id, cancellationToken);
@@ -160,6 +160,7 @@ public async Task<IActionResult> GetByExactName(string name, CancellationToken c
     
     [HttpDelete("{id}")]
     [Authorize(Policy = "Write")]
+
 
     public async Task<IActionResult> DeleteGroup(string id, CancellationToken cancellationToken){
         try{

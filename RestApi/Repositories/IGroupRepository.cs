@@ -13,6 +13,7 @@ public interface IGroupRepository{
     Task<GroupModel> GetByExactNameAsync(string name, CancellationToken cancellationToken);
 
 
+
     Task DeleteByIdAsync(string id, CancellationToken cancellationToken);
 
     Task<GroupModel> CreateAsync(string name, Guid[] users, CancellationToken cancellationToken);
@@ -28,6 +29,7 @@ public interface IGroupRepository{
     Task<GroupModel> CreateAsync(string name, Guid[] users, CancellationToken cancellationToken);
 
     Task<GroupModel> GetByExactNameAsync(string name, CancellationToken cancellationToken);
+
 
     Task UpdateGroupAsync(string id, string name, Guid[] users, CancellationToken cancellationToken);
 }

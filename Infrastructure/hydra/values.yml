@@ -1,0 +1,38 @@
+ingress: 
+  public: 
+    enables: true
+    hosts:
+      - host: public.hydra.test
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+  admin:
+    enabled: true
+    hosts:
+      - host: admin.hydra.test
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+  hydra:
+    dangerousForceHttp: true
+    admin:
+      port: 4445
+    public:
+      port: 4444
+    config:
+      dns: "postgres://hydra:hydra_password@hydra-postgresql.databases.svc.cluster.local:5432/hydra?sslmode=disable"
+      urls:
+        self:
+          issuer: http://public.hydra.test/
+      secrets:
+        system: ["ufuiwhudinifnh-diw", "jdhjdhjufis-fuhdufgia"]
+      serve:
+        admin:
+          port: 4445
+        public:
+          port: 4444
+      strategies:
+        acces_token: "jwt"
+    dev: true
+    automigration:
+      enabled: true
