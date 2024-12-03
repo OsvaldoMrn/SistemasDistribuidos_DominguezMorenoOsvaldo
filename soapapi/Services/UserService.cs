@@ -12,6 +12,7 @@ public class UserService : IUserContract{
         _userRepository = userRepository;
     }
 
+
     public async Task<UserResponseDto> CreateUser(UserCreateRequestDto userRequest, CancellationToken cancellationToken)
     {
         var user = userRequest.ToModel();

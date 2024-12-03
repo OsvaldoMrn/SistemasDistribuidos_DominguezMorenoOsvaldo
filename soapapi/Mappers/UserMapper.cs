@@ -26,6 +26,7 @@ public static class UserMapper{
             BirthDate = user.BirthDate
         };
     }
+
     public static UserEntity ToEntity(this UserModel user){
         return new UserEntity{
             Id = user.Id,
