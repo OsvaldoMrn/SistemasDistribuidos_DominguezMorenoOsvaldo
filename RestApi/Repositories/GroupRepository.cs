@@ -1,3 +1,4 @@
+
 using MongoDB.Bson;
 using MongoDB.Driver;
 using RestApi.Infrastructure.Mongo;
@@ -13,6 +14,7 @@ public class GroupRepository : IGroupRepository
         var database = mongoClient.GetDatabase(configuration.GetValue<string>("MongoDb:Groups:DatabaseName"));
         _groups = database.GetCollection<GroupEntity>(configuration.GetValue<string>("MongoDb:Groups:CollectionName"));
     }
+
 
 
     public async Task<GroupModel> CreateAsync(string name, Guid[] users, CancellationToken cancellationToken)
@@ -50,6 +52,7 @@ public class GroupRepository : IGroupRepository
         var groups = await _groups.Find(filter).ToListAsync(cancellationToken);
         return groups.Select(group => group.ToModel());
     }
+
 
     public async Task<IEnumerable<GroupModel>> GetByNameAsync(string name, int pageIndex, int pageSize, string orderBy, CancellationToken cancellationToken)
     {

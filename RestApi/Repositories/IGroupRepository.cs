@@ -7,6 +7,7 @@ public interface IGroupRepository{
     Task<IEnumerable<GroupModel>> GetByNameAsync(string name, CancellationToken cancellationToken); // Nuevo método
 
 
+
     Task<IEnumerable<GroupModel>> GetByNameAsync(string name,  int pageIndex, int pageSize, string orderBy, CancellationToken cancellationToken); // Nuevo método
 
     Task DeleteByIdAsync(string id, CancellationToken cancellationToken);

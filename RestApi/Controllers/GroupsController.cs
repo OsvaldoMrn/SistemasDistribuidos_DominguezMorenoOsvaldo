@@ -4,6 +4,7 @@ using RestApi.Dtos;
 using RestApi.Services;
 using RestApi.Mappers;
 
+[ApiController]
 using RestApi.Exceptions;
 using System.Text.RegularExpressions;
 using System.Net;
@@ -25,6 +26,7 @@ public class GroupsController : ControllerBase
     }
     [HttpGet("{id}")]
 
+
     [Authorize]
     [HttpGet("{id}")]
     [Authorize(Policy = "Read")]
@@ -37,6 +39,7 @@ public class GroupsController : ControllerBase
         }
         return Ok(group.ToDto());
     }
+
 
     public async Task<ActionResult<IEnumerable<GroupResponse>>> GetGroupsByName([FromQuery] string name, CancellationToken cancellationToken)
     {
@@ -70,6 +73,13 @@ public class GroupsController : ControllerBase
         // 200 - response del objeto actualizado
         // 204 - sin response
 
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<GroupResponse>>> GetGroupsByName(
+        CancellationToken cancellationToken,
+        [FromQuery] string name, 
+        [FromQuery] int pageIndex = 1, 
+        [FromQuery] int pageSize = 10, 
+        [FromQuery] string orderBy = "name")
 
     //Paginación tarea*
     [HttpGet]
@@ -87,6 +97,9 @@ public class GroupsController : ControllerBase
         {
             return Ok(new List<GroupResponse>());
         }
+
+        return Ok(groups.Select(group => group.ToDto()));
+    }
         return Ok(groups.Select(group => group.ToDto()));
     }
 

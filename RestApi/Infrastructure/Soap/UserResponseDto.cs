@@ -1,6 +1,7 @@
 using System.Runtime.Serialization;
 
 namespace RestApi.Infrastructure.Soap;
+
 [DataContract]
 public class UserResponseDto
 {
