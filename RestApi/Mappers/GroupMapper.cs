@@ -9,6 +9,11 @@ public static class GroupMapper{
         return new GroupResponse{
             Id = group.Id,
             Name = group.Name,
+
+            CreationDate = group.CreationDate
+        };
+    }
+
             CreationDate = group.CreationDate,
             Users = group.Users.ToDto()
         };
