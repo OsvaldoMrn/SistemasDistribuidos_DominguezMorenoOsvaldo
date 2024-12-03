@@ -19,7 +19,6 @@ public class GroupService : IGroupService
     }
 
 
-
     public async Task DeleteGroupByIdAsync(string id, CancellationToken cancellationToken)
     {
         var group = await _groupRepository.GetByIdAsync(id, cancellationToken);
@@ -82,12 +81,38 @@ public class GroupService : IGroupService
             };
         }));
 
-        var orderedGroups = orderBy switch
-        {
-            "name" => groupUserModels.OrderBy(g => g.Name),
-            "creationDate" => groupUserModels.OrderBy(g => g.CreationDate),
-            _ => groupUserModels.OrderBy(g => g.Name)
+        return groupUserModels;
+    }
+
+
+    public async Task<GroupUserModel> CreateGroupAsync(string name, Guid[] users, CancellationToken cancellationToken)
+    {
+        if(users.Length == 0){
+            throw new InvalidGroupRequestFormatException();
+        }
+
+        var groups = await _groupRepository.GetByExactNameAsync(name, cancellationToken);
+        if(groups is not null){
+            throw new GroupAlreadyExistsException();
+        }
+        var group = await _groupRepository.CreateAsync(name, users, cancellationToken);
+        return new GroupUserModel{
+            Id = group.Id,
+            Name = group.Name,
+            CreationDate = group.CreationDate,
+            Users = (await Task.WhenAll(group.Users.Select(userId => _userRepository.GetByIdAsync(userId, cancellationToken)))).Where(user => user !=null).ToList()
+
         };
+    }
+
+    public async Task<GroupUserModel> GetGroupByExactNameAsync(string name, CancellationToken cancellationToken)
+    {
+        var group = await _groupRepository.GetByExactNameAsync(name, cancellationToken);
+        if (group == null)
+        {
+            return null;
+        }
+
 
         return orderedGroups
             .Skip((pageIndex - 1) * pageSize)
@@ -144,6 +169,7 @@ public class GroupService : IGroupService
             CreationDate = group.CreationDate,
             Users = (await Task.WhenAll(group.Users.Select(userId => _userRepository.GetByIdAsync(userId, cancellationToken)))).Where(user => user != null).ToList()
         };
+
     }
 
         {

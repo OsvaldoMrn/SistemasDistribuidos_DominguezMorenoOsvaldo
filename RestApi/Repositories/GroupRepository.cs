@@ -16,7 +16,6 @@ public class GroupRepository : IGroupRepository
     }
 
 
-
     public async Task<GroupModel> CreateAsync(string name, Guid[] users, CancellationToken cancellationToken)
     {
         var group = new GroupEntity{
@@ -46,12 +45,27 @@ public class GroupRepository : IGroupRepository
         }
     }
 
-    public async Task<IEnumerable<GroupModel>> GetByNameAsync(string name, CancellationToken cancellationToken) // Nuevo método
+    public async Task<IEnumerable<GroupModel>> GetByNameAsync(string name, int pageIndex, int pageSize, string orderBy, CancellationToken cancellationToken)
     {
-        var filter = Builders<GroupEntity>.Filter.Regex(x => x.Name, new MongoDB.Bson.BsonRegularExpression(name, "i")); // Búsqueda por coincidencia parcial
-        var groups = await _groups.Find(filter).ToListAsync(cancellationToken);
+        var filter = Builders<GroupEntity>.Filter.Regex(x => x.Name, new MongoDB.Bson.BsonRegularExpression(name, "i"));
+        
+        var sort = orderBy switch
+        {
+            "name" => Builders<GroupEntity>.Sort.Ascending(x => x.Name),
+            "creationDate" => Builders<GroupEntity>.Sort.Ascending(x => x.CreatedAt),
+            _ => Builders<GroupEntity>.Sort.Ascending(x => x.Name) // Orden por defecto si no se especifica
+        };
+
+        var groups = await _groups
+            .Find(filter)
+            .Sort(sort)
+            .Skip((pageIndex - 1) * pageSize)
+            .Limit(pageSize)
+            .ToListAsync(cancellationToken);
+
         return groups.Select(group => group.ToModel());
     }
+
 
 
     public async Task<IEnumerable<GroupModel>> GetByNameAsync(string name, int pageIndex, int pageSize, string orderBy, CancellationToken cancellationToken)
@@ -81,6 +95,7 @@ public class GroupRepository : IGroupRepository
         var group = await _groups.Find(filter).FirstOrDefaultAsync(cancellationToken);
         return group?.ToModel();
     }
+
 
     public async Task UpdateGroupAsync(string id, string name, Guid[] users, CancellationToken cancellationToken)
     {
