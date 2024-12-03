@@ -12,6 +12,10 @@ public class UserService : IUserContract{
         _userRepository = userRepository;
     }
 
+
+
+
+
     public async Task<UserResponseDto> CreateUser(UserCreateRequestDto userRequest, CancellationToken cancellationToken)
     {
         var user = userRequest.ToModel();
@@ -29,6 +33,7 @@ public class UserService : IUserContract{
         await _userRepository.DeleteByIdAsync(user, cancellationToken);
         return true;
     }
+
 
     public async Task<IList<UserResponseDto>> GetAll(CancellationToken cancellationToken)
     {
@@ -55,6 +60,8 @@ public class UserService : IUserContract{
         throw new FaultException("User not found");
     }
 
+
+
     public async Task<UserResponseDto> UpdateUser(UserUpdateRequestDto userRequest, CancellationToken cancellationToken)
     {
         var existingUser = await _userRepository.GetByIdAsync(userRequest.Id, cancellationToken);
@@ -73,4 +80,6 @@ public class UserService : IUserContract{
         var updatedUser = await _userRepository.UpdateAsync(existingUser, cancellationToken);
         return updatedUser.ToDto();
     }
+
+
 }

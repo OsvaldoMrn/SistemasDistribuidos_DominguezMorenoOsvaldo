@@ -1,3 +1,4 @@
+
 using MongoDB.Bson;
 using MongoDB.Driver;
 using RestApi.Infrastructure.Mongo;
@@ -13,6 +14,7 @@ public class GroupRepository : IGroupRepository
         var database = mongoClient.GetDatabase(configuration.GetValue<string>("MongoDb:Groups:DatabaseName"));
         _groups = database.GetCollection<GroupEntity>(configuration.GetValue<string>("MongoDb:Groups:CollectionName"));
     }
+
 
     public async Task<GroupModel> CreateAsync(string name, Guid[] users, CancellationToken cancellationToken)
     {
@@ -64,12 +66,38 @@ public class GroupRepository : IGroupRepository
         return groups.Select(group => group.ToModel());
     }
 
+
+
+
+
+    public async Task<IEnumerable<GroupModel>> GetByNameAsync(string name, int pageIndex, int pageSize, string orderBy, CancellationToken cancellationToken)
+    {
+        var filter = Builders<GroupEntity>.Filter.Regex(x => x.Name, new MongoDB.Bson.BsonRegularExpression(name, "i"));
+        
+        var sort = orderBy switch
+        {
+            "name" => Builders<GroupEntity>.Sort.Ascending(x => x.Name),
+            "creationDate" => Builders<GroupEntity>.Sort.Ascending(x => x.CreatedAt),
+            _ => Builders<GroupEntity>.Sort.Ascending(x => x.Name) // Orden por defecto si no se especifica
+        };
+
+        var groups = await _groups
+            .Find(filter)
+            .Sort(sort)
+            .Skip((pageIndex - 1) * pageSize)
+            .Limit(pageSize)
+            .ToListAsync(cancellationToken);
+
+        return groups.Select(group => group.ToModel());
+    }
+
     public async Task<GroupModel> GetByExactNameAsync(string name, CancellationToken cancellationToken)
     {
         var filter = Builders<GroupEntity>.Filter.Eq(x => x.Name, name); 
         var group = await _groups.Find(filter).FirstOrDefaultAsync(cancellationToken);
         return group?.ToModel();
     }
+
 
     public async Task UpdateGroupAsync(string id, string name, Guid[] users, CancellationToken cancellationToken)
     {
