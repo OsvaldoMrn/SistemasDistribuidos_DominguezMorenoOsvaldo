@@ -56,6 +56,7 @@ public class UserService : IUserContract{
         throw new FaultException("User not found");
     }
 
+
     public async Task<UserResponseDto> UpdateUser(UserUpdateRequestDto userRequest, CancellationToken cancellationToken)
     {
         var existingUser = await _userRepository.GetByIdAsync(userRequest.Id, cancellationToken);
