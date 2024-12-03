@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using RestApi.Dtos;
 using RestApi.Services;
@@ -19,6 +20,7 @@ public class GroupsController : ControllerBase
     {
         _groupService = groupService;
     }
+    [HttpGet("{id}")]
     [Authorize]
     [HttpGet("{id}")]
     [Authorize(Policy = "Read")]
@@ -31,6 +33,7 @@ public class GroupsController : ControllerBase
         }
         return Ok(group.ToDto());
     }
+
     //localhost/groups
     //GET localhost/groups/ID
         //200 - retornamos el objeto

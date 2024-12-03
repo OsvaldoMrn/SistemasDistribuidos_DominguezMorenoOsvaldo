@@ -4,6 +4,7 @@ namespace RestApi.Repositories;
 
 public interface IGroupRepository{
     Task<GroupModel> GetByIdAsync(string Id, CancellationToken cancellationToken);
+
     Task<IEnumerable<GroupModel>> GetByNameAsync(string name,  int pageIndex, int pageSize, string orderBy, CancellationToken cancellationToken); // Nuevo método
 
     Task DeleteByIdAsync(string id, CancellationToken cancellationToken);

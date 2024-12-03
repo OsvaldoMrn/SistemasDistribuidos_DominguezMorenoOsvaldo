@@ -2,9 +2,6 @@
 build/
 [Bb]in/
 [Oo]bj/
-
-=======
-
 # User-specific files
 *.rsuser
 *.suo
@@ -50,4 +47,3 @@ $RECYCLE.BIN/
 *.tmp
 *.vsix
 *.vsixmanifest
-

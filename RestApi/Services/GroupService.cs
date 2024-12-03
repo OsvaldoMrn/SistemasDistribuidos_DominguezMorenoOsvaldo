@@ -7,6 +7,9 @@ namespace RestApi.Services;
 public class GroupService : IGroupService
 {
     private readonly IGroupRepository _groupRepository;
+    public GroupService(IGroupRepository groupRepository){
+        _groupRepository = groupRepository;
+    }
     private readonly IUserRepository _userRepository;
     public GroupService(IGroupRepository groupRepository, IUserRepository userRepository){
         _groupRepository = groupRepository;
@@ -32,6 +35,9 @@ public class GroupService : IGroupService
         return new GroupUserModel{
             Id = group.Id,
             Name = group.Name,
+            CreationDate = group.CreationDate
+        };
+    }
             CreationDate = group.CreationDate,
             Users = (await Task.WhenAll(group.Users.Select(userId => _userRepository.GetByIdAsync(userId, cancellationToken)))).Where(user => user !=null).ToList()
 
